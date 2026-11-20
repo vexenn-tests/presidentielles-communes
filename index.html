@@ -40,70 +40,84 @@ h1{font-size:26px;line-height:1.2;margin:8px 0 6px}
 /* Fiche commune */
 .place{margin:22px 0 16px}
 .place h2{font-size:30px;line-height:1.15;margin:0 0 10px}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--soft);color:#3a3a3a;display:inline-flex;align-items:center;gap:6px}
-.tag.yr{background:var(--ink);color:#fff;font-size:13px}
+.place h2 .dep{font-size:18px;font-weight:400;color:var(--muted);margin-left:6px;white-space:nowrap}
 .note{font-size:13px;color:var(--muted);margin-top:10px}
+.key{font-size:14px;color:var(--muted);margin:0 0 12px}
 
-/* Cartes scrutins */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.id{display:flex;align-items:center;gap:14px;padding-left:4px}
-.id + .id{border-top:1px solid #ececea;padding-top:14px}
-.av{position:relative;width:64px;height:64px;border-radius:50%;flex:0 0 64px;color:#fff;font-weight:700;font-size:20px;
+/* Photo ronde avec anneau de la couleur du camp */
+.av{position:relative;width:44px;height:44px;border-radius:50%;flex:0 0 44px;color:#fff;font-weight:700;font-size:14px;
   display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--fc);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--fc)}
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%}
-.who{min-width:0;flex:1}
-.nm{font-size:18px;font-weight:700;margin:0;line-height:1.2}
-.pt{font-size:13px;color:var(--muted);margin:2px 0 0}
-.pt .pd{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:0;background:var(--fc)}
-.pc{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.pc small{font-size:14px;font-weight:600;color:var(--muted)}
 .na{color:var(--muted);font-size:14px}
 
-/* Frise chronologique */
-.tl{display:flex;align-items:stretch;background:#fff;border:1px solid var(--line);border-radius:16px;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);padding:22px 28px 22px 16px;overflow:hidden}
-.rail{display:flex;flex-direction:column;flex:0 0 74px}
-.rail span{font-size:13px;font-weight:700;color:var(--muted);display:flex;align-items:center}
-.rail .r1,.rail .r2{flex:1}
-.rail .ra{height:46px}
-.step{flex:1;min-width:0;display:flex;flex-direction:column;animation:walk .5s ease-out both;animation-delay:calc(var(--i) * .35s)}
-.slot{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:6px 6px}
-.slot .av{width:58px;height:58px;flex:0 0 58px;font-size:18px}
-.slot .nm{font-size:15px;margin-top:4px}
-.slot .pc{font-size:21px}
-.slot .tr{display:none}
-.slot.na{justify-content:center;color:var(--muted);font-size:13px}
-.axis{position:relative;height:46px;display:flex;align-items:center;justify-content:center}
-.axis::before{content:"";position:absolute;left:0;right:0;top:50%;height:6px;margin-top:-3px;
-  background:linear-gradient(to right,var(--prev) 50%,var(--seg) 50%)}
-.rail + .step .axis::before{left:50%;background:var(--seg)}
-.step:last-child .axis::before{right:-14px}
-.step:last-child .axis::after{content:"";position:absolute;right:-28px;top:50%;margin-top:-11px;
-  border-left:16px solid var(--seg);border-top:11px solid transparent;border-bottom:11px solid transparent}
-.yr{position:relative;z-index:1;background:var(--ink);color:#fff;font-weight:700;font-size:14px;padding:5px 12px;border-radius:999px;box-shadow:0 0 0 4px #fff}
-@keyframes walk{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.step{animation:none}}
+/* Tableau des résultats */
+.tblw{border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+table.res{width:100%;border-collapse:collapse}
+.res th{text-align:left;font-size:13px;font-weight:700;color:var(--muted);padding:14px 18px;border-bottom:2px solid var(--ink);background:#fff}
+.res td{padding:14px 18px;border-bottom:1px solid var(--line);vertical-align:middle}
+.res tbody tr:last-child td{border-bottom:0}
+.res .ty{font-size:24px;font-weight:700;width:130px;position:relative;padding-left:58px}
+
+/* Frise verticale dans la colonne Année */
+.rail{position:absolute;left:26px;top:0;bottom:0;width:6px;background:linear-gradient(to bottom,var(--prev) 50%,var(--seg) 50%)}
+.rail.first{top:50%;background:var(--seg)}
+.rail.last{bottom:14px}
+.rail::after{content:"";position:absolute;left:-6px;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;
+  background:#fff;border:4px solid var(--seg);box-sizing:border-box;animation:pop .35s ease-out both;animation-delay:calc(var(--i) * .15s)}
+.rail.first::after{top:0}
+.arr{position:absolute;left:20px;bottom:0;border-top:14px solid var(--seg);border-left:9px solid transparent;border-right:9px solid transparent}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.rail::after{animation:none}}
+.res .elu-c,.res .elu-h{background:var(--soft)}
+.tc{display:flex;align-items:center;gap:12px}
+.nm2{font-weight:700;font-size:15px}
+.tp{font-size:20px;font-weight:700;line-height:1.1;margin-top:2px}
+
 @media (max-width:700px){
-  .tl{flex-direction:column;padding:12px 16px 28px}
-  .rail{display:none}
-  .step{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(0,1fr);align-items:center}
-  .axis{order:-1;height:auto;align-self:stretch;min-height:150px}
-  .axis::before{left:50%;right:auto;top:0;bottom:0;width:6px;height:auto;margin:0 0 0 -3px;
-    background:linear-gradient(to bottom,var(--prev) 50%,var(--seg) 50%)}
-  .rail + .step .axis::before{left:50%;top:50%;background:var(--seg)}
-  .step:last-child .axis::before{right:auto;bottom:-14px}
-  .step:last-child .axis::after{right:auto;left:50%;top:auto;bottom:-28px;margin:0 0 0 -11px;
-    border-left:11px solid transparent;border-right:11px solid transparent;border-top:16px solid var(--seg);border-bottom:0}
-  .slot .tr{display:block;font-size:12px;font-weight:700;color:var(--muted)}
-  @keyframes walk{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+  .place h2{font-size:26px}
+  .res thead{display:none}
+  .res, .res tbody{display:block;width:100%}
+  .res tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;border-bottom:1px solid var(--line);padding:12px 12px 14px 48px;position:relative}
+  .res .ty{position:static;padding-left:0}
+  .rail{left:20px;background:linear-gradient(to bottom,var(--prev) 26px,var(--seg) 26px)}
+  .rail.first{top:26px}
+  .rail::after{top:26px}
+  .rail.first::after{top:0}
+  .arr{left:14px}
+  .res tbody tr:last-child{border-bottom:0}
+  .res td{display:block;border:0;padding:0;min-width:0}
+  .res td[data-l]::before{content:attr(data-l);display:block;font-size:11px;color:var(--muted);margin-bottom:6px;line-height:1.2}
+  .res .ty{grid-column:1/-1;font-size:20px;width:auto;margin-bottom:4px}
+  .res .elu-c{border-radius:10px;padding:6px}
+  .res .tc{flex-direction:column;align-items:flex-start;gap:6px}
+  .res .av{width:38px;height:38px;flex:0 0 38px;font-size:12px}
+  .res .nm2{font-size:13px}
+  .res .tp{font-size:16px}
+}
+
+/* Encart newsletter 2027 */
+.nl{position:relative;overflow:hidden;margin-top:22px;border-radius:16px;background:#101d25;color:#fff;
+  padding:26px 28px;display:flex;align-items:center;gap:24px;justify-content:space-between}
+.nl-txt{position:relative;z-index:1;max-width:620px}
+.nl-tag{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+  background:#4742ff;color:#fff;border-radius:999px;padding:4px 10px}
+.nl-t{font-size:24px;font-weight:700;line-height:1.2;margin:12px 0 6px}
+.nl-d{font-size:15px;line-height:1.45;margin:0;color:#c9d0d8}
+.nl-btn{position:relative;z-index:1;flex:none;display:inline-flex;align-items:center;gap:8px;background:#4742ff;color:#fff;
+  font-weight:700;font-size:15px;text-decoration:none;padding:14px 20px;border-radius:999px;transition:background .15s,transform .15s}
+.nl-btn:hover{background:#6b72fb;transform:translateY(-1px)}
+.nl-btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.nl-bg{position:absolute;right:-10px;bottom:-38px;font-size:150px;font-weight:700;line-height:1;color:#fff;opacity:.06;
+  letter-spacing:-.04em;pointer-events:none}
+@media (max-width:700px){
+  .nl{flex-direction:column;align-items:flex-start;padding:22px 20px}
+  .nl-t{font-size:20px}
+  .nl-btn{width:100%;justify-content:center}
+  .nl-bg{font-size:110px}
 }
 
 .empty{background:#fff;border:1px dashed #cfcfcb;border-radius:16px;padding:32px;text-align:center;font-size:15px;color:#4a4a4a}
 .foot{font-size:12px;color:#777;margin-top:22px;line-height:1.5}
-.foot a{color:var(--link)}
-@media (max-width:560px){.grid{grid-template-columns:1fr}.place h2{font-size:26px}}
 </style>
 </head>
 <body>
@@ -261,32 +275,8 @@ h1{font-size:26px;line-height:1.2;margin:8px 0 6px}
   }
   const initials = n => n.split(/[\s-]+/).filter(w => /^[A-ZÉ]/.test(w)).map(w => w[0]).slice(0,2).join("");
 
-  function idRow(ei, rec, label, used){
-    if(!rec || !rec[2]) return '<div class="id"><span class="na">'+label+' : pas de données</span></div>';
-    const w = winner(ei, rec);
-    if(w.photo) used.add(w.n);
-    const av = w.photo ? '<img src="'+esc(w.photo)+'" alt="" loading="lazy" onerror="this.remove()">' : "";
-    return '<div class="id" style="--fc:'+w.c+'" title="'+esc(w.n)+' : '+fmt(w.v)+' voix sur '+fmt(rec[2])+' exprimés · participation '+f1(pct(rec[1],rec[0]))+' %">'
-      + '<div class="av">'+initials(w.n)+av+'</div>'
-      + '<div class="who"><p class="nm">'+esc(w.n)+'</p><p class="pt"><span class="pd"></span>'+label+'</p></div>'
-      + '<div class="pc">'+f1(w.pc)+'<small> %</small></div></div>';
-  }
-
-  function slot(ei, rec, label, used){
-    if(!rec || !rec[2]) return '<div class="slot na"><span class="tr">'+label+'</span>pas de données</div>';
-    const w = winner(ei, rec);
-    if(w.photo) used.add(w.n);
-    const av = w.photo ? '<img src="'+esc(w.photo)+'" alt="" loading="lazy" onerror="this.remove()">' : "";
-    const last = w.n.replace(/^(Jean-Marie|Jean-Luc|Jean-Pierre|Marie-George|\S+)\s+/, "");
-    return '<div class="slot" style="--fc:'+w.c+'" title="'+esc(w.n)+' : '+fmt(w.v)+' voix sur '+fmt(rec[2])+' exprimés · participation '+f1(pct(rec[1],rec[0]))+' %">'
-      + '<span class="tr">'+label+'</span>'
-      + '<div class="av">'+initials(w.n)+av+'</div>'
-      + '<p class="nm">'+esc(last)+'</p>'
-      + '<div class="pc">'+f1(w.pc)+'<small> %</small></div></div>';
-  }
-
   function setFoot(){
-    foot.innerHTML = "Sources : " + esc(P.source) + ". Pourcentages des suffrages exprimés ; voix et participation au survol.";
+    foot.innerHTML = "Sources : " + esc(P.source) + ". Pourcentages des suffrages exprimés ; voix au survol.";
   }
 
   async function show(code){
@@ -297,26 +287,58 @@ h1{font-size:26px;line-height:1.2;margin:8px 0 6px}
     try { data = await loadDep(c.dep); }
     catch(e){ out.innerHTML = '<div class="empty">Impossible de charger data/dep/'+esc(c.dep)+'.js</div>'; return; }
     const recs = data[code] || [];
-    const used = new Set();
-    let h = '<section class="place"><h2>'+esc(c.name)+'</h2><div class="tags">'
-      + '<span class="tag">'+esc(depName(c.dep))+' ('+esc(c.dep)+')</span>'
-      + (c.cps.length ? '<span class="tag">CP '+esc(c.cps.slice(0,6).join(", "))+(c.cps.length > 6 ? '…' : '')+'</span>' : '')
-      + '<span class="tag">INSEE '+esc(c.code)+'</span></div>';
+    let h = '<section class="place"><h2>'+esc(c.name)+' <span class="dep">'+esc(depName(c.dep))+' ('+esc(c.dep)+')</span></h2>';
     if(c.aliases.length) h += '<p class="note">Territoire actuel, résultats des anciennes communes additionnés : '+esc(c.aliases.join(", "))+'.</p>';
     if(["75056","69123","13055"].includes(c.code)) h += '<p class="note">Résultats pour la ville entière (tous arrondissements).</p>';
-    h += '</section><div class="tl"><div class="rail"><span class="r1">1<sup>er</sup>&nbsp;tour</span><span class="ra"></span><span class="r2">2<sup>nd</sup>&nbsp;tour</span></div>';
+    h += '</section>' + renderTableau(c, recs) + newsletterCTA(c);
+    out.innerHTML = h;
+    setFoot();
+  }
+
+  // ---------- Encart newsletter (affiché seulement avec les résultats d'une commune) ----------
+  // À remplacer par l'URL exacte de la page d'inscription à la newsletter politique.
+  const NEWSLETTER_URL = "https://www.20minutes.fr/politique/";
+  function newsletterCTA(c){
+    return '<aside class="nl" aria-label="Newsletter politique">'
+      + '<div class="nl-txt"><span class="nl-tag">Présidentielle 2027</span>'
+      + '<p class="nl-t">Et en 2027, comment votera '+esc(c.name)+' ?</p>'
+      + '<p class="nl-d">Candidats, sondages, programmes : suivez la campagne présidentielle avec la newsletter politique de 20 Minutes.</p></div>'
+      + '<a class="nl-btn" href="'+NEWSLETTER_URL+'" target="_blank" rel="noopener">Je m’inscris à la newsletter <span aria-hidden="true">→</span></a>'
+      + '<span class="nl-bg" aria-hidden="true">2027</span></aside>';
+  }
+
+  // ---------- Tableau des résultats ----------
+  const ok = r => r && r[2];
+  function avatar(w){
+    const img = w.photo ? '<img src="'+esc(w.photo)+'" alt="" loading="lazy" onerror="this.remove()">' : "";
+    return '<div class="av sm" style="--fc:'+w.c+'">'+initials(w.n)+img+'</div>';
+  }
+  function tcell(ei, rec, label, cls){
+    const a = cls ? ' class="'+cls+'"' : '';
+    if(!ok(rec)) return '<td'+a+' data-l="'+label+'"><span class="na">—</span></td>';
+    const w = winner(ei, rec);
+    return '<td'+a+' data-l="'+label+'" title="'+esc(w.n)+' : '+fmt(w.v)+' voix"><div class="tc">'+avatar(w)
+      + '<div><div class="nm2">'+esc(w.n)+'</div><div class="tp">'+f1(w.pc)+' %</div></div></div></td>';
+  }
+  function renderTableau(c, recs){
+    let h = '<p class="key">Candidat arrivé en tête à '+esc(c.name)+' à chaque présidentielle, et président élu. '
+      + 'La couleur de la frise suit le vainqueur du 2<sup>nd</sup> tour à '+esc(c.name)+'.</p>'
+      + '<div class="tblw"><table class="res"><thead><tr><th>Année</th><th>1<sup>er</sup> tour à '+esc(c.name)+'</th>'
+      + '<th>2<sup>nd</sup> tour à '+esc(c.name)+'</th><th class="elu-h">Président élu</th></tr></thead><tbody>';
     let prev = "#ddd";
     for(let y = 0; y < years.length; y++){
-      const r2 = recs[2*y+1], seg = r2 && r2[2] ? winner(2*y+1, r2).c : "#ddd";
-      h += '<div class="step" style="--i:'+y+';--seg:'+seg+';--prev:'+prev+'">';
+      const r2 = recs[2*y+1], seg = ok(r2) ? winner(2*y+1, r2).c : "#ddd";
+      const first = y === 0, last = y === years.length - 1;
+      h += '<tr style="--seg:'+seg+';--prev:'+prev+';--i:'+y+'"><td class="ty">'
+        + '<span class="rail'+(first ? ' first' : '')+(last ? ' last' : '')+'"></span>'
+        + (last ? '<span class="arr"></span>' : '') + years[y] + '</td>';
       prev = seg;
       h += ''
-        + slot(2*y, recs[2*y], "1<sup>er</sup> tour", used)
-        + '<div class="axis"><span class="yr">'+years[y]+'</span></div>'
-        + slot(2*y+1, r2, "2<sup>nd</sup> tour", used) + '</div>';
+        + tcell(2*y, recs[2*y], "1er tour à "+esc(c.name))
+        + tcell(2*y+1, recs[2*y+1], "2nd tour à "+esc(c.name))
+        + tcell(2*y+1, P.elections[2*y+1].nat, "Président élu", "elu-c") + '</tr>';
     }
-    out.innerHTML = h + '</div>';
-    setFoot(used);
+    return h + '</tbody></table></div>';
   }
 
   function welcome(){

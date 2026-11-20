@@ -87,7 +87,7 @@ def cand_info(nom, prenom):
     if key not in CANDIDATS:
         sys.exit(f"Candidat inconnu : {nom} {prenom}")
     disp, fam = CANDIDATS[key]
-    return disp, COL[fam]
+    return disp, COL[fam], fam
 
 
 def dep_of(code):
@@ -159,8 +159,8 @@ def main():
     meta = defaultdict(list)
     for e, pan, nom, prenom, v in cands_meta:
         order[e].append(pan)
-        disp, color = cand_info(nom, prenom)
-        m = {"n": disp, "c": color}
+        disp, color, fam = cand_info(nom, prenom)
+        m = {"n": disp, "c": color, "f": fam}
         photo = f"assets/photos/{slug(disp)}.jpg"
         if os.path.exists(os.path.join(ROOT, photo)):
             m["p"] = photo
