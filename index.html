@@ -34,6 +34,7 @@ h1{font-size:26px;line-height:1.2;margin:8px 0 6px}
 .sugg .empty{color:var(--muted);cursor:default}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chips-l{font-size:14px;color:var(--muted);margin-right:4px}
 .chip{font:inherit;font-size:14px;padding:9px 16px;border-radius:999px;border:1px solid #d8d8d3;background:#fff;color:var(--ink);cursor:pointer;min-height:40px}
 .chip:hover{border-color:var(--ink)}
 
@@ -42,6 +43,10 @@ h1{font-size:26px;line-height:1.2;margin:8px 0 6px}
 .place h2{font-size:30px;line-height:1.15;margin:0 0 10px}
 .place h2 .dep{font-size:18px;font-weight:400;color:var(--muted);margin-left:6px;white-space:nowrap}
 .note{font-size:13px;color:var(--muted);margin-top:10px}
+.rl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:14px 18px;
+  border:2px solid #4742ff;border-radius:12px;color:#4742ff;text-decoration:none;font-weight:700;font-size:15px;transition:background .15s,color .15s}
+.rl:hover,.rl:focus-visible{background:#4742ff;color:#fff}
+.rl-s{font-weight:400;font-size:20px;line-height:1}
 .key{font-size:14px;color:var(--muted);margin:0 0 12px}
 
 /* Photo ronde avec anneau de la couleur du camp */
@@ -125,7 +130,7 @@ table.res{width:100%;border-collapse:collapse}
   <div class="sbox">
     <div class="search">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Nom de commune ou code postal"
+      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Tapez le nom de votre commune ou son code postal"
         aria-label="Rechercher une commune" role="combobox" aria-controls="sugg" aria-expanded="false">
       <button class="clear" id="clear" type="button" aria-label="Effacer" hidden>×</button>
     </div>
@@ -137,6 +142,7 @@ table.res{width:100%;border-collapse:collapse}
 </div>
 
 <script src="data/index.js"></script>
+<script src="data/liens20min.js"></script>
 <script>
 (function(){
   "use strict";
@@ -276,7 +282,7 @@ table.res{width:100%;border-collapse:collapse}
   const initials = n => n.split(/[\s-]+/).filter(w => /^[A-ZÉ]/.test(w)).map(w => w[0]).slice(0,2).join("");
 
   function setFoot(){
-    foot.innerHTML = "Sources : " + esc(P.source) + ". Pourcentages des suffrages exprimés ; voix au survol.";
+    foot.innerHTML = "Sources : data.gouv.fr — Données des élections agrégées (Ministère de l’Intérieur)";
   }
 
   async function show(code){
@@ -290,9 +296,21 @@ table.res{width:100%;border-collapse:collapse}
     let h = '<section class="place"><h2>'+esc(c.name)+' <span class="dep">'+esc(depName(c.dep))+' ('+esc(c.dep)+')</span></h2>';
     if(c.aliases.length) h += '<p class="note">Territoire actuel, résultats des anciennes communes additionnés : '+esc(c.aliases.join(", "))+'.</p>';
     if(["75056","69123","13055"].includes(c.code)) h += '<p class="note">Résultats pour la ville entière (tous arrondissements).</p>';
-    h += '</section>' + renderTableau(c, recs) + newsletterCTA(c);
+    h += '</section>' + renderTableau(c, recs) + resultsLink(c) + newsletterCTA(c);
     out.innerHTML = h;
     setFoot();
+  }
+
+  // ---------- Lien vers la page résultats de 20minutes.fr ----------
+  // Pages tirées du plan de site élections de 20 Minutes (data/liens20min.js, généré par scripts/liens_20min.py).
+  // Pas de page pour la commune → pas de lien.
+  function resultsLink(c){
+    const p = (window.LIENS20 || {})[c.code];
+    if(!p) return "";
+    const u = "https://www.20minutes.fr/elections/resultats/" + p + "?annee=2027&amp;scrutin=presidentielle";
+    return '<a class="rl" href="'+u+'" target="_blank" rel="noopener">'
+      + '<span class="rl-t">Les résultats détaillés du dernier scrutin à '+esc(c.name)+'</span>'
+      + '<span class="rl-s" aria-hidden="true">→</span></a>';
   }
 
   // ---------- Encart newsletter (affiché seulement avec les résultats d'une commune) ----------
@@ -344,7 +362,7 @@ table.res{width:100%;border-collapse:collapse}
   function welcome(){
     document.title = "Présidentielles par commune";
     const ex = [["75056","Paris"],["13055","Marseille"],["69123","Lyon"],["74010","Annecy"],["59350","Lille"],["2A004","Ajaccio"]];
-    out.innerHTML = '<div class="chips">' + ex.filter(e => byCode.has(e[0]))
+    out.innerHTML = '<div class="chips"><span class="chips-l">Essayez par exemple :</span>' + ex.filter(e => byCode.has(e[0]))
       .map(e => '<button class="chip" data-c="'+e[0]+'">'+e[1]+'</button>').join("") + '</div>';
     out.querySelectorAll("[data-c]").forEach(b => b.addEventListener("click", () => location.hash = b.dataset.c));
     setFoot();
