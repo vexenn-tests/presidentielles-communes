@@ -163,25 +163,20 @@ table.res{width:100%;border-collapse:collapse}
   const byCode = new Map(C.map(c => [c.code, c]));
   const depName = d => P.deps[d] || d;
 
-  // ---------- Photos : lues dans un Google Sheet public (colonne A = candidat, colonne B = lien photo) ----------
-  // Pour changer une photo, modifier le Sheet ; la page le relit à chaque ouverture.
-  const PHOTOS_SHEET_ID = "1N-dbDOiFGGg1x6V_A7XeShdCvwKf35gGI4WCIUQBU_8";
-  const PHOTOS = {};
-  window.__presidPhotos = resp => {
-    try {
-      for(const r of (resp.table && resp.table.rows) || []){
-        const n = r.c && r.c[0] && r.c[0].v, u = r.c && r.c[1] && r.c[1].v;
-        if(n && u && /^https?:\/\//i.test(String(u).trim())) PHOTOS[String(n).trim()] = String(u).trim();
-      }
-    } catch(e) {}
-    if(location.hash.length > 1) route();
+  // ---------- Photos 20 Minutes (nom exact du candidat → lien de l'image) ----------
+  // Un candidat absent de cette liste s'affiche avec ses initiales.
+  const PHOTOS = {
+    "Emmanuel Macron":    "https://img.20mn.fr/tzNC1c20Tb6gglZNiHxHCik/4096x4096_media.jpg",
+    "Nicolas Sarkozy":    "https://img.20mn.fr/Bv4MMvsiSuutQGm930RfMyk/4096x4096_media.jpg",
+    "Jacques Chirac":     "https://img.20mn.fr/5eTigGn9QRezvW4txhvbqCk/4096x4096_media.jpg",
+    "François Hollande":  "https://img.20mn.fr/lHVQPW61QXqqLQ66N8U8XSk/4096x4096_media.jpg",
+    "Ségolène Royal":     "https://img.20mn.fr/1zrNFgyISIuzQfFJScZfQCk/4096x4096_media.jpg",
+    "Lionel Jospin":      "https://img.20mn.fr/i4kaDNC2T_2MEUJhrkNMPCk/4096x4096_media.jpg",
+    "Jean-Luc Mélenchon": "https://img.20mn.fr/UMvJEa40Txe_eb95nWniaSk/4096x4096_media.jpg",
+    "François Fillon":    "https://img.20mn.fr/UGGBOonJRhWDvDk3yLJu7Sk/4096x4096_media.jpg",
+    "Marine Le Pen":      "https://img.20mn.fr/AevMm9VRSN2IIbBTl8BKuSk/4096x4096_media.jpg",
+    "Éric Zemmour":       "https://img.20mn.fr/770nsYNMS7-yyGkqUc-3oCk/4096x4096_media.jpg"
   };
-  (function loadPhotos(){
-    const s = document.createElement("script");
-    s.src = "https://docs.google.com/spreadsheets/d/" + PHOTOS_SHEET_ID + "/gviz/tq?tqx=out:json;responseHandler:__presidPhotos&_=" + Date.now();
-    s.onerror = () => {};  // hors ligne : on garde les initiales
-    document.head.appendChild(s);
-  })();
   const years = [...new Set(P.elections.map(e => e.annee))];
 
   // ---------- Recherche ----------
